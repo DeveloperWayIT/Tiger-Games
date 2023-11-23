@@ -6,10 +6,22 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "check:ts": "tsc --incremental --noEmit --project tsconfig.json",
+    "check:prettier": "prettier -u --check .",
+    "check:prettier:fix": "prettier -u --write .",
+    "check:lint": "eslint ./src --ext .js,.jsx,.ts,.tsx --report-unused-disable-directives --max-warnings 0",
+    "check:lint:fix": "eslint ./src --fix",
+    "check:all": "conc --kill-others-on-fail 'yarn:check:ts' 'yarn:check:prettier' 'yarn:check:lint'",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "",
+      "pre-push": "",
+      "...": "..."
+    }
   },
   "dependencies": {
     "@react-spring/web": "^9.7.3",
@@ -44,6 +56,7 @@
     "@typescript-eslint/parser": "^6.10.0",
     "@vitejs/plugin-react": "^4.2.0",
     "commitlint": "^18.4.3",
+    "concurrently": "^8.2.2",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
