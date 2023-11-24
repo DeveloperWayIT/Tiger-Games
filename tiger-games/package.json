@@ -14,13 +14,15 @@
     "check:all": "conc --kill-others-on-fail 'yarn:check:ts' 'yarn:check:prettier' 'yarn:check:lint'",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "commitlint": "commitlint --edit",
+    "prepare": "cd .. && husky install tiger-games/.husky"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "",
-      "pre-push": "",
-      "...": "..."
+      "pre-commit": [
+        "./tiger-games yarn check:all"
+      ]
     }
   },
   "dependencies": {
