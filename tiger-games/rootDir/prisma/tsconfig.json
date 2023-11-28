@@ -8,6 +8,7 @@
     "strict": true,
     "lib": ["es2021"],
     "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
     "skipLibCheck": true
   },
   "exclude": ["dist"]

@@ -1,21 +1,20 @@
-import express from "express"
-// import PrismaClient from "@prisma/client"
-import { PrismaClient } from '@prisma/client';
+import express from "express";
+import { prisma } from './prisma.mjs';
+
+// import {roleRoutes} from './routes/RoleRoutes.mjs';
+import {userRoutes} from './routes/UserRoutes.mjs';
 
 const app = express();
 const port = 3000;
 
+// Aggiunge il middleware per il parsing del corpo delle richieste JSON
+app.use(express.json());
 
-// Crea un'istanza di Prisma
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: `${process.env.DATABASE_URL}?connection_limit=20`,
-    },
-  },
-});
+// Aggiunge le route specifiche
+// app.use('/api', roleRoutes);
+app.use('/api', userRoutes);
 
-// Endpoint per ottenere tutti i roles
+/*
 app.get('/roles', async (req, res) => {
   try {
     // Utilizza Prisma per ottenere tutti gli utenti dalla tabella "User"
@@ -37,6 +36,7 @@ app.get('/users', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+*/
 
 // Chiudi la connection pool e Prisma quando l'applicazione termina
 process.on('SIGINT', async () => {
