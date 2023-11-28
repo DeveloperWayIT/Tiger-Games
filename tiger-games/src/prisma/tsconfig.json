@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "target": "es2021",
+    "module": "node16",
+    "strict": true,
+    "lib": ["es2021"],
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "exclude": ["dist"]
+}
