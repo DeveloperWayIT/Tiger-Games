@@ -3,14 +3,28 @@ import { prisma } from '../prisma.mjs';
 
 export class UserController {
     static async getAllUsers(req, res) {
-        // Implementa la logica per ottenere tutti gli utenti dal database
-        const users = await prisma.user.findMany();
-        res.json(users);
+        try {
+            const users = await prisma.user.findMany();
+            res.json(users);
+        } catch (error) {
+            console.error('Error retrieving User:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
     }
 
     static async getUserById(req, res) {
-        const userId = req.params.id;
-        // Implementa la logica per ottenere un utente specifico dal database
-        res.send(`Dettagli dell'utente con ID ${userId}`);
+        try {
+            const userId = parseInt(req.params.id);
+            const user = await prisma.user.findUnique({
+                where: {
+                  user_id: userId,
+                },
+              });
+            res.json(user);
+        } catch (error) {
+            console.error('Error retrieving User:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
     }
+
 }

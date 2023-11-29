@@ -1,7 +1,7 @@
 import express from "express";
 import { prisma } from './prisma.mjs';
 
-// import {roleRoutes} from './routes/RoleRoutes.mjs';
+import {roleRoutes} from './routes/RoleRoutes.mjs';
 import {userRoutes} from './routes/UserRoutes.mjs';
 
 const app = express();
@@ -11,7 +11,7 @@ const port = 3000;
 app.use(express.json());
 
 // Aggiunge le route specifiche
-// app.use('/api', roleRoutes);
+app.use('/api', roleRoutes);
 app.use('/api', userRoutes);
 
 /*
