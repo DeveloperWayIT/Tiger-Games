@@ -1,8 +1,8 @@
-import express from "express";
-import { prisma } from './prisma.mjs';
+import express from 'express';
+import { prisma } from './utils/prisma';
 
-import {roleRoutes} from './routes/RoleRoutes.mjs';
-import {userRoutes} from './routes/UserRoutes.mjs';
+import { roleRoutes } from './routes/RoleRoutes';
+import { userRoutes } from './routes/UserRoutes';
 
 const app = express();
 const port = 3000;
