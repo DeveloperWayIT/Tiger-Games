@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "start-client": "vite",
-    "build": "./node_modules/.bin/tsc && vite build && (cd ../server && yarn)",
+    "build": "vite build && (cd ../server && yarn)",
     "check:ts": "tsc --incremental --noEmit --project tsconfig.json",
     "check:prettier": "prettier -u --check .",
     "check:prettier:fix": "prettier -u --write .",
