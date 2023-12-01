@@ -5,7 +5,7 @@ import { roleRoutes } from './routes/RoleRoutes';
 import { userRoutes } from './routes/UserRoutes';
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 1337;
 
 // Aggiunge il middleware per il parsing del corpo delle richieste JSON
 app.use(express.json());
