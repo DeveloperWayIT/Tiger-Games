@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsnd --respawn --transpile-only --exit-child src/app.ts",
     "start": "npm run build && node dist/app.js",
+    "postinstall": "tsc",
     "build": "rimraf ./build && tsc"
   },
   "author": "",
