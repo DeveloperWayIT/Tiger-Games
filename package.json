@@ -13,6 +13,11 @@
     "start-dev": "concurrently \"cd client && yarn dev\" \"cd server && yarn dev\"",
     "heroku-postbuild": "yarn client-build"
   },
+
+  "engines": {
+    "node": "20.9.0"
+    },
+  
   "dependencies": {
     "concurrently": "^6.2.0"
   }
