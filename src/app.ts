@@ -1,10 +1,13 @@
 import express from 'express';
 import { prisma } from './utils/prisma';
-
+import path from 'path';
 import { roleRoutes } from './routes/RoleRoutes';
 import { userRoutes } from './routes/UserRoutes';
 
 const app = express();
+
+app.use(express.static(path.join(__dirname + '/public')));
+
 const port = process.env.PORT || 1337;
 
 // Aggiunge il middleware per il parsing del corpo delle richieste JSON
