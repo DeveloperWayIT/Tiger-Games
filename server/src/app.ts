@@ -6,8 +6,16 @@ import { userRoutes } from './routes/UserRoutes';
 
 const app = express();
 
-app.use(express.static(path.join(__dirname + '/public')));
+// Your existing server setup code
+console.log(process.env.NODE_ENV);
+// Serve static files from the React app in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'client/dist')));
 
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
+  });
+}
 const port = process.env.PORT || 1337;
 
 // Aggiunge il middleware per il parsing del corpo delle richieste JSON
