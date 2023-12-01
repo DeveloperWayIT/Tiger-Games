@@ -1,0 +1,32 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["config"]
+}
+
+model role {
+  role_id    Int     @id(map: "pk_role") @default(autoincrement())
+  role       String  @db.VarChar(1000)
+  active_flg Boolean @default(false)
+  user       user[]
+
+  @@schema("config")
+}
+
+model user {
+  user_id    Int     @id(map: "pk_user") @default(autoincrement())
+  email      String  @unique(map: "user_uq") @db.VarChar(1000)
+  surname    String? @db.VarChar(1000)
+  name       String? @db.VarChar(1000)
+  password   String? @db.VarChar(1000)
+  role_id    Int     @default(0)
+  active_flg Boolean @default(false)
+  role       role    @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "user_role_id_role_fk")
+
+  @@schema("config")
+}
