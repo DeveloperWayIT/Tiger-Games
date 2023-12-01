@@ -1,5 +1,5 @@
 {
-  "name": "tiger-games",
+  "name": "tiger-games-fe",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -17,12 +17,12 @@
     "build-storybook": "storybook build",
     "cypress:open": "cypress open",
     "commitlint": "commitlint --edit",
-    "prepare": "cd .. && husky install tiger-games/.husky"
+    "prepare": "cd .. && husky install client/.husky"
   },
   "husky": {
     "hooks": {
       "pre-commit": [
-        "./tiger-games yarn check:all"
+        "./client yarn check:all"
       ]
     }
   },
