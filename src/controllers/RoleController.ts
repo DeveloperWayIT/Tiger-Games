@@ -12,12 +12,13 @@ interface RoleCreateInput {
 }
 
 export class RoleController {
+
   static async getAllRoles(req: Request, res: Response) {
     try {
       const roles = await prisma.role.findMany();
       res.json(roles);
     } catch (error) {
-      console.error("Error retrieving Role:", error);
+      console.error("Error retrieving all Role:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -32,7 +33,7 @@ export class RoleController {
       });
       res.json(role);
     } catch (error) {
-      console.error("Error retrieving Role:", error);
+      console.error("Error retrieving Role by id:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -53,7 +54,7 @@ export class RoleController {
 
       res.json(roles);
     } catch (error) {
-      console.error("Error creating Role:", error);
+      console.error("Error retrieving Role by filter:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -98,7 +99,7 @@ export class RoleController {
 
       res.json(result);
     } catch (error) {
-      console.error("Error creating Role:", error);
+      console.error("Error deleting Role:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -127,7 +128,7 @@ export class RoleController {
 
       res.json(result);
     } catch (error) {
-      console.error("Error creating Role:", error);
+      console.error("Error updating Role:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
