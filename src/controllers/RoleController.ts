@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { prisma } from "../utils/prisma";
+import { fillParametersData } from "../common/Common";
 import { parseBooleanDef } from "zod-to-json-schema";
 import { boolean } from "zod";
 
@@ -45,7 +46,7 @@ export class RoleController {
     try {
       const queryConditions: Record<string, any> = {};
 
-      RoleController.fillParametersData(req.body, queryConditions);
+      fillParametersData(req.body, queryConditions);
       const roles = await prisma.role.findMany({
         where: queryConditions,
       });
@@ -54,19 +55,6 @@ export class RoleController {
     } catch (error) {
       console.error("Error creating Role:", error);
       res.status(500).json({ error: "Internal Server Error" });
-    }
-  }
-
-  private static fillParametersData(params: any, data: Record<string, any>) {
-    if (!params) {
-      throw new Error("No parameters in input");
-    }
-
-    // Cycle throuh all parameters and assign only those defined:
-    for (const key in params) {
-      if (params.hasOwnProperty(key)) {
-        data[key] = params[key];
-      }
     }
   }
 
@@ -81,7 +69,7 @@ export class RoleController {
       //  { Role: 'Client', ActiveFlg: true, OtherField: 'value' };
 
       const data: RoleCreateInput = { role: "", active_flg: false };
-      RoleController.fillParametersData(req.body, data);
+      fillParametersData(req.body, data);
 
       const result = await prisma.role.create({
         data: data,
@@ -101,12 +89,9 @@ export class RoleController {
    */
   static async deleteRole(req: Request, res: Response) {
     try {
-      //Example parameters to be sent in req.params:
-      //  { Role: 'Client', ActiveFlg: true, OtherField: 'value' };
-
       const data: Record<string, any> = {};
 
-      RoleController.fillParametersData(req.body, data);
+      fillParametersData(req.body, data);
       const result = await prisma.role.deleteMany({
         where: data,
       });
