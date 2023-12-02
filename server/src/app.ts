@@ -1,11 +1,18 @@
 import express from 'express';
+import cors from 'cors';
 import { prisma } from './utils/prisma';
 import path from 'path';
 import { roleRoutes } from './routes/RoleRoutes';
 import { userRoutes } from './routes/UserRoutes';
 
+const origin = {
+  origin: [`${process.env.FRONT_URL}`, 'http://localhost:5173'],
+  credentials: true,
+};
+
 const app = express();
 
+//|--MIDDLEWARES--|
 // Serve static files from the React app in production
 const _dirname = path.dirname('');
 const buildPath = path.join(_dirname, '../client/dist');
@@ -18,11 +25,15 @@ if (process.env.NODE_ENV === 'production') {
     );
   });
 }
+
+app.use(cors(origin));
+
 const port = process.env.PORT || 1337;
 
 // Aggiunge il middleware per il parsing del corpo delle richieste JSON
 app.use(express.json());
 
+//|--ROUTES--|
 // Aggiunge le route specifiche
 app.use('/api', roleRoutes);
 app.use('/api', userRoutes);
@@ -51,6 +62,9 @@ app.get('/users', async (req, res) => {
 });
 */
 
+//|--ERROR HANDLERS--|
+
+//|--Connect to db and server--|
 // Chiudi la connection pool e Prisma quando l'applicazione termina
 process.on('SIGINT', async () => {
   await prisma.$disconnect();
