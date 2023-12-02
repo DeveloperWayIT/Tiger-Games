@@ -12,7 +12,7 @@
     "client-install": "cd client && yarn",
     "client-build": "cd client && yarn build",
     "start-dev": "concurrently \"cd client && yarn dev\" \"cd server && yarn dev\"",
-    "heroku-postbuild": "yarn config set production false && cd client && yarn && yarn build"
+    "heroku-postbuild": "yarn --production=false --ignore-scripts && cd client && yarn && yarn build"
   },
   
 
