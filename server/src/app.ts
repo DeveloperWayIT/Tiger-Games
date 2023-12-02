@@ -15,7 +15,7 @@ const app = express();
 //|--MIDDLEWARES--|
 // Serve static files from the React app in production
 const _dirname = path.dirname('');
-const buildPath = path.join(_dirname, '../client/dist/');
+const buildPath = path.join(_dirname, '../../client/dist');
 if (process.env.NODE_ENV === 'development') {
   app.use(express.static(buildPath));
 
