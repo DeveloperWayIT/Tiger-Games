@@ -6,9 +6,9 @@ import { boolean } from "zod";
 
 interface RoleCreateInput {
   // All properties of the model:
-  role_id?: number;
-  role: string;
-  active_flg: boolean;
+  RoleId?: number;
+  Role: string;
+  ActiveFlg: boolean;
 }
 
 export class RoleController {
@@ -28,7 +28,7 @@ export class RoleController {
       const roleId = parseInt(req.params.id);
       const role = await prisma.role.findUnique({
         where: {
-          role_id: roleId,
+          RoleId: roleId,
         },
       });
       res.json(role);
@@ -40,7 +40,7 @@ export class RoleController {
 
   /**
    * 
-   * @param req.body {"role": "Client"}
+   * @param req.body {"Role": "Client"}
    * @param res 
    */
   static async getRoleByFilter(req: Request, res: Response) {
@@ -61,15 +61,12 @@ export class RoleController {
 
   /**
    * 
-   * @param req.body { { "role": "Provider", "active_flg": true }, <other fields...> }
+   * @param req.body { { "Role": "Provider", "ActiveFlg": true }, <other fields...> }
    * @param res 
    */
   static async createRole(req: Request, res: Response) {
     try {
-      //Example parameters to be sent in req.params:
-      //  { Role: 'Client', ActiveFlg: true, OtherField: 'value' };
-
-      const data: RoleCreateInput = { role: "", active_flg: false };
+      const data: RoleCreateInput = { Role: "", ActiveFlg: false };
       fillParametersData(req.body, data);
 
       const result = await prisma.role.create({
@@ -85,7 +82,7 @@ export class RoleController {
 
   /**
    * 
-   * @param req.body { "role_id": 3, <other conditions...> }
+   * @param req.body { "RoleId": 3, <other conditions...> }
    * @param res 
    */
   static async deleteRole(req: Request, res: Response) {
@@ -109,10 +106,10 @@ export class RoleController {
    * @param req.body 
    * { 
         "conditions" : {
-          "role_id": 5
+          "RoleId": 5
         },
         "updateData": {
-          "active_flg": false
+          "ActiveFlg": false
         }
       }
    * @param res { "count": 1 }

@@ -39,11 +39,12 @@ datasource db {
 }
 
 Per importare dal database gli schema:
-npx prisma db pull
-
+1) npx prisma db pull
+2) npx prisma generate
+Se non già fatto, prima del punto 2) eseguire:
 yarn add @prisma/client
 
-npx prisma generate
+
 
 npx ts-node index.ts
 

@@ -17,7 +17,7 @@ export class UserController {
       const userId = parseInt(req.params.id);
       const user = await prisma.user.findUnique({
         where: {
-          user_id: userId,
+          UserId: userId,
         },
       });
       res.json(user);
