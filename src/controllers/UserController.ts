@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { prisma } from '../utils/prisma';
 import { fillParametersData } from "../common/Common";
+import { logger } from "../common/Common";
 import { parseBooleanDef } from "zod-to-json-schema";
 import { boolean } from "zod";
 
@@ -21,7 +22,7 @@ export class UserController {
       const users = await prisma.user.findMany();
       res.json(users);
     } catch (error) {
-      console.error('Error retrieving User:', error);
+      logger.error('Error retrieving User:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }
@@ -36,7 +37,7 @@ export class UserController {
       });
       res.json(user);
     } catch (error) {
-      console.error('Error retrieving User:', error);
+      logger.error('Error retrieving User:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }
@@ -52,7 +53,7 @@ export class UserController {
 
       res.json(users);
     } catch (error) {
-      console.error("Error retrieving User by filter:", error);
+      logger.error("Error retrieving User by filter:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -68,7 +69,7 @@ export class UserController {
 
       res.json(result);
     } catch (error) {
-      console.error("Error creating User:", error);
+      logger.error("Error creating User:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -84,7 +85,7 @@ export class UserController {
 
       res.json(result);
     } catch (error) {
-      console.error("Error deleting User:", error);
+      logger.error("Error deleting User:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -100,7 +101,7 @@ export class UserController {
 
       res.json(result);
     } catch (error) {
-      console.error("Error updating User:", error);
+      logger.error("Error updating User:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }

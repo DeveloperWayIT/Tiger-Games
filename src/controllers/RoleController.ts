@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { prisma } from "../utils/prisma";
 import { fillParametersData } from "../common/Common";
+import { logger } from "../common/Common";
 import { parseBooleanDef } from "zod-to-json-schema";
 import { boolean } from "zod";
 
@@ -18,7 +19,7 @@ export class RoleController {
       const roles = await prisma.role.findMany();
       res.json(roles);
     } catch (error) {
-      console.error("Error retrieving all Role:", error);
+      logger.error("Error retrieving all Role:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -33,7 +34,7 @@ export class RoleController {
       });
       res.json(role);
     } catch (error) {
-      console.error("Error retrieving Role by id:", error);
+      logger.error("Error retrieving Role by id:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -54,7 +55,7 @@ export class RoleController {
 
       res.json(roles);
     } catch (error) {
-      console.error("Error retrieving Role by filter:", error);
+      logger.error("Error retrieving Role by filter:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -75,7 +76,7 @@ export class RoleController {
 
       res.json(result);
     } catch (error) {
-      console.error("Error creating Role:", error);
+      logger.error("Error creating Role:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -96,7 +97,7 @@ export class RoleController {
 
       res.json(result);
     } catch (error) {
-      console.error("Error deleting Role:", error);
+      logger.error("Error deleting Role:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -125,7 +126,7 @@ export class RoleController {
 
       res.json(result);
     } catch (error) {
-      console.error("Error updating Role:", error);
+      logger.error("Error updating Role:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
