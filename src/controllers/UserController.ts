@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../utils/prisma';
-import { fillParametersData } from "../common/Common";
-import { logger } from "../common/Common";
+import { ITALIAN_LANGUAGE, MESSAGE_LANGUAGE, fillParametersData, decodePrismaError, logger } from "../common/Common";
 import { parseBooleanDef } from "zod-to-json-schema";
 import { boolean } from "zod";
 
@@ -16,14 +15,23 @@ interface UserCreateInput {
   ActiveFlg: boolean;
 }
 
+let specificMsg: string;
+
 export class UserController {
   static async getAllUsers(req: Request, res: Response) {
     try {
       const users = await prisma.user.findMany();
       res.json(users);
     } catch (error) {
-      logger.error('Error retrieving User:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      switch (MESSAGE_LANGUAGE) {
+        case ITALIAN_LANGUAGE:
+          specificMsg = "Errore nell'estrazione di tutti gli User";
+          break;
+        default:
+          specificMsg = "Error retrieving all User";
+          break;
+      }
+      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
     }
   }
 
@@ -37,8 +45,15 @@ export class UserController {
       });
       res.json(user);
     } catch (error) {
-      logger.error('Error retrieving User:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      switch (MESSAGE_LANGUAGE) {
+        case ITALIAN_LANGUAGE:
+          specificMsg = "Errore nella ricerca di uno User per id";
+          break;
+        default:
+          specificMsg = "Error retrieving User by id";
+          break;
+      }
+      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
     }
   }
 
@@ -53,8 +68,15 @@ export class UserController {
 
       res.json(users);
     } catch (error) {
-      logger.error("Error retrieving User by filter:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      switch (MESSAGE_LANGUAGE) {
+        case ITALIAN_LANGUAGE:
+          specificMsg = "Errore nell'estrazione degli User tramite filtro";
+          break;
+        default:
+          specificMsg = "Error retrieving User by filter";
+          break;
+      }
+      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
     }
   }
 
@@ -69,8 +91,15 @@ export class UserController {
 
       res.json(result);
     } catch (error) {
-      logger.error("Error creating User:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      switch (MESSAGE_LANGUAGE) {
+        case ITALIAN_LANGUAGE:
+          specificMsg = "Errore nella creazione di User";
+          break;
+        default:
+          specificMsg = "Error creating User";
+          break;
+      }
+      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
     }
   }
 
@@ -85,8 +114,15 @@ export class UserController {
 
       res.json(result);
     } catch (error) {
-      logger.error("Error deleting User:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      switch (MESSAGE_LANGUAGE) {
+        case ITALIAN_LANGUAGE:
+          specificMsg = "Errore nella cancellazione di User";
+          break;
+        default:
+          specificMsg = "Error deleting User";
+          break;
+      }
+      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
     }
   }
 
@@ -101,8 +137,15 @@ export class UserController {
 
       res.json(result);
     } catch (error) {
-      logger.error("Error updating User:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      switch (MESSAGE_LANGUAGE) {
+        case ITALIAN_LANGUAGE:
+          specificMsg = "Errore nell'aggiornamento di User";
+          break;
+        default:
+          specificMsg = "Error updating User";
+          break;
+      }
+      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
     }
   }
 }

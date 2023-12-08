@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { prisma } from "../utils/prisma";
-import { fillParametersData } from "../common/Common";
-import { logger } from "../common/Common";
+import { ITALIAN_LANGUAGE, MESSAGE_LANGUAGE, fillParametersData, decodePrismaError, logger } from "../common/Common";
 import { parseBooleanDef } from "zod-to-json-schema";
 import { boolean } from "zod";
+import { Prisma } from "@prisma/client";
 
 interface RoleCreateInput {
   // All properties of the model:
@@ -12,6 +12,8 @@ interface RoleCreateInput {
   ActiveFlg: boolean;
 }
 
+let specificMsg: string;
+
 export class RoleController {
 
   static async getAllRoles(req: Request, res: Response) {
@@ -19,8 +21,15 @@ export class RoleController {
       const roles = await prisma.role.findMany();
       res.json(roles);
     } catch (error) {
-      logger.error("Error retrieving all Role:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      switch (MESSAGE_LANGUAGE) {
+        case ITALIAN_LANGUAGE:
+          specificMsg = "Errore nell'estrazione di tutti i Role";
+          break;
+        default:
+          specificMsg = "Error retrieving all Role";
+          break;
+      }
+      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
     }
   }
 
@@ -34,8 +43,15 @@ export class RoleController {
       });
       res.json(role);
     } catch (error) {
-      logger.error("Error retrieving Role by id:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      switch (MESSAGE_LANGUAGE) {
+        case ITALIAN_LANGUAGE:
+          specificMsg = "Errore nella ricerca di un Role per id";
+          break;
+        default:
+          specificMsg = "Error retrieving Role by id";
+          break;
+      }
+      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
     }
   }
 
@@ -55,8 +71,15 @@ export class RoleController {
 
       res.json(roles);
     } catch (error) {
-      logger.error("Error retrieving Role by filter:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      switch (MESSAGE_LANGUAGE) {
+        case ITALIAN_LANGUAGE:
+          specificMsg = "Errore nell'estrazione dei Role tramite filtro";
+          break;
+        default:
+          specificMsg = "Error retrieving Role by filter";
+          break;
+      }
+      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
     }
   }
 
@@ -76,8 +99,15 @@ export class RoleController {
 
       res.json(result);
     } catch (error) {
-      logger.error("Error creating Role:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      switch (MESSAGE_LANGUAGE) {
+        case ITALIAN_LANGUAGE:
+          specificMsg = "Errore nella creazione di Role";
+          break;
+        default:
+          specificMsg = "Error creating Role";
+          break;
+      }
+      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
     }
   }
 
@@ -97,8 +127,15 @@ export class RoleController {
 
       res.json(result);
     } catch (error) {
-      logger.error("Error deleting Role:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      switch (MESSAGE_LANGUAGE) {
+        case ITALIAN_LANGUAGE:
+          specificMsg = "Errore nella cancellazione di Role";
+          break;
+        default:
+          specificMsg = "Error deleting Role";
+          break;
+      }
+      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
     }
   }
 
@@ -126,8 +163,15 @@ export class RoleController {
 
       res.json(result);
     } catch (error) {
-      logger.error("Error updating Role:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      switch (MESSAGE_LANGUAGE) {
+        case ITALIAN_LANGUAGE:
+          specificMsg = "Errore nell'aggiornamento di Role";
+          break;
+        default:
+          specificMsg = "Error updating Role";
+          break;
+      }
+      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
     }
   }
 }
