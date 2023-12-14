@@ -21,15 +21,7 @@ export class RoleController {
       const roles = await prisma.role.findMany();
       res.json(roles);
     } catch (error) {
-      switch (MESSAGE_LANGUAGE) {
-        case ITALIAN_LANGUAGE:
-          specificMsg = "Errore nell'estrazione di tutti i Role";
-          break;
-        default:
-          specificMsg = "Error retrieving all Role";
-          break;
-      }
-      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0001", ["Role"]) });
     }
   }
 
@@ -43,15 +35,7 @@ export class RoleController {
       });
       res.json(role);
     } catch (error) {
-      switch (MESSAGE_LANGUAGE) {
-        case ITALIAN_LANGUAGE:
-          specificMsg = "Errore nella ricerca di un Role per id";
-          break;
-        default:
-          specificMsg = "Error retrieving Role by id";
-          break;
-      }
-      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0002", ["Role"]) });
     }
   }
 
@@ -71,15 +55,7 @@ export class RoleController {
 
       res.json(roles);
     } catch (error) {
-      switch (MESSAGE_LANGUAGE) {
-        case ITALIAN_LANGUAGE:
-          specificMsg = "Errore nell'estrazione dei Role tramite filtro";
-          break;
-        default:
-          specificMsg = "Error retrieving Role by filter";
-          break;
-      }
-      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0003", ["Role"]) });
     }
   }
 
@@ -89,8 +65,8 @@ export class RoleController {
    * @param res 
    */
   static async createRole(req: Request, res: Response) {
+    const data: RoleCreateInput = { Role: "", ActiveFlg: false };
     try {
-      const data: RoleCreateInput = { Role: "", ActiveFlg: false };
       fillParametersData(req.body, data);
 
       const result = await prisma.role.create({
@@ -99,15 +75,7 @@ export class RoleController {
 
       res.json(result);
     } catch (error) {
-      switch (MESSAGE_LANGUAGE) {
-        case ITALIAN_LANGUAGE:
-          specificMsg = "Errore nella creazione di Role";
-          break;
-        default:
-          specificMsg = "Error creating Role";
-          break;
-      }
-      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0004", ["Role", data.Role]) });
     }
   }
 
@@ -127,15 +95,7 @@ export class RoleController {
 
       res.json(result);
     } catch (error) {
-      switch (MESSAGE_LANGUAGE) {
-        case ITALIAN_LANGUAGE:
-          specificMsg = "Errore nella cancellazione di Role";
-          break;
-        default:
-          specificMsg = "Error deleting Role";
-          break;
-      }
-      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0005", ["Role"]) });
     }
   }
 
@@ -163,15 +123,7 @@ export class RoleController {
 
       res.json(result);
     } catch (error) {
-      switch (MESSAGE_LANGUAGE) {
-        case ITALIAN_LANGUAGE:
-          specificMsg = "Errore nell'aggiornamento di Role";
-          break;
-        default:
-          specificMsg = "Error updating Role";
-          break;
-      }
-      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0006", ["Role"]) });
     }
   }
 }

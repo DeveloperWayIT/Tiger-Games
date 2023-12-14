@@ -1,0 +1,70 @@
+[
+    {
+        "MsgCode": "GEN01",
+        "English": "because of an error. Ask details to the Administrator",
+        "Italian": "a causa di un errore. Chiedi dettagli all'Amministratore del Sistema"
+    },
+    {
+        "MsgCode": "GEN02",
+        "English": "because of an unknown error. Ask details to the Administrator",
+        "Italian": "a causa di un errore sconosciuto. Chiedi dettagli all'Amministratore del Sistemaa"
+    },
+    {
+        "MsgCode": "GEN03",
+        "English": "because of a generic error. Ask details to the Administrator",
+        "Italian": "a causa di un errore generico. Chiedi dettagli all'Amministratore del Sistema"
+    },
+
+    {
+        "MsgCode": "SPEC0001",
+        "English": "Error retrieving all {0}",
+        "Italian": "Errore nell'estrazione di tutti gli {0}"
+    },
+    {
+        "MsgCode": "SPEC0002",
+        "English": "Error retrieving {0} by id",
+        "Italian": "Errore nella ricerca di {0} per id"
+    },
+    {
+        "MsgCode": "SPEC0003",
+        "English": "Error retrieving {0} by filter",
+        "Italian": "Errore nell'estrazione degli {0} tramite filtro"
+    },
+    {
+        "MsgCode": "SPEC0004",
+        "English": "Error creating {0} with {1}",
+        "Italian": "Errore nella creazione di {0} con {1}"
+    },
+    {
+        "MsgCode": "SPEC0005",
+        "English": "Error deleting {0}",
+        "Italian": "Errore nella cancellazione di {0}"
+    },
+    {
+        "MsgCode": "SPEC0006",
+        "English": "Error updating {0}",
+        "Italian": "Errore nell'aggiornamento di {0}"
+    },
+
+    {
+        "MsgCode": "P2002",
+        "English": "because a unique constraint was violated",
+        "Italian": "perché è stato violato un vincolo di unicità"
+    },
+    {
+        "MsgCode": "P2003",
+        "English": "because it is still used by other records. First manage them",
+        "Italian": "perché è usato da altri elementi, che bisogna gestire prima",
+        "French": "porqui il est utilizé par autres elements qui sont tous à gestir en avant"
+    },
+    {
+        "MsgCode": "P2011",
+        "English": "because you didn't fill in a mandatory field",
+        "Italian": "perché non hai valorizzato un campo obbligatorio"
+    },
+    {
+        "MsgCode": "P2002",
+        "English": "because a unique constraint was violated",
+        "Italian": "perché è stato violato un vincolo di unicità"
+    }
+]

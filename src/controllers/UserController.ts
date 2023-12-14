@@ -15,7 +15,7 @@ interface UserCreateInput {
   ActiveFlg: boolean;
 }
 
-let specificMsg: string;
+let specificMsgCode: string;
 
 export class UserController {
   static async getAllUsers(req: Request, res: Response) {
@@ -23,15 +23,7 @@ export class UserController {
       const users = await prisma.user.findMany();
       res.json(users);
     } catch (error) {
-      switch (MESSAGE_LANGUAGE) {
-        case ITALIAN_LANGUAGE:
-          specificMsg = "Errore nell'estrazione di tutti gli User";
-          break;
-        default:
-          specificMsg = "Error retrieving all User";
-          break;
-      }
-      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0001", ["User"]) });
     }
   }
 
@@ -45,15 +37,7 @@ export class UserController {
       });
       res.json(user);
     } catch (error) {
-      switch (MESSAGE_LANGUAGE) {
-        case ITALIAN_LANGUAGE:
-          specificMsg = "Errore nella ricerca di uno User per id";
-          break;
-        default:
-          specificMsg = "Error retrieving User by id";
-          break;
-      }
-      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0002", ["User"]) });
     }
   }
 
@@ -68,21 +52,13 @@ export class UserController {
 
       res.json(users);
     } catch (error) {
-      switch (MESSAGE_LANGUAGE) {
-        case ITALIAN_LANGUAGE:
-          specificMsg = "Errore nell'estrazione degli User tramite filtro";
-          break;
-        default:
-          specificMsg = "Error retrieving User by filter";
-          break;
-      }
-      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0003", ["User"]) });
     }
   }
 
   static async createUser(req: Request, res: Response) {
+    const data: UserCreateInput = { Email: "", Surname: "", Name: "", Password: "", RoleId: -1, ActiveFlg: false };
     try {
-      const data: UserCreateInput = { Email: "", Surname: "", Name: "", Password: "", RoleId: -1, ActiveFlg: false };
       fillParametersData(req.body, data);
 
       const result = await prisma.user.create({
@@ -91,15 +67,7 @@ export class UserController {
 
       res.json(result);
     } catch (error) {
-      switch (MESSAGE_LANGUAGE) {
-        case ITALIAN_LANGUAGE:
-          specificMsg = "Errore nella creazione di User";
-          break;
-        default:
-          specificMsg = "Error creating User";
-          break;
-      }
-      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0004", ["User", data.Email]) });
     }
   }
 
@@ -114,15 +82,7 @@ export class UserController {
 
       res.json(result);
     } catch (error) {
-      switch (MESSAGE_LANGUAGE) {
-        case ITALIAN_LANGUAGE:
-          specificMsg = "Errore nella cancellazione di User";
-          break;
-        default:
-          specificMsg = "Error deleting User";
-          break;
-      }
-      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0005", ["User"]) });
     }
   }
 
@@ -137,15 +97,7 @@ export class UserController {
 
       res.json(result);
     } catch (error) {
-      switch (MESSAGE_LANGUAGE) {
-        case ITALIAN_LANGUAGE:
-          specificMsg = "Errore nell'aggiornamento di User";
-          break;
-        default:
-          specificMsg = "Error updating User";
-          break;
-      }
-      res.status(500).json({ error: decodePrismaError(error, specificMsg) });
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0006", ["User"]) });
     }
   }
 }
