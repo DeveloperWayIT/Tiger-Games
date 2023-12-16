@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { number } from 'zod';
 const LOG_FILE_PATH = process.env.LOG_FILE_PATH;
 const LOG_LEVEL = process.env.LOG_LEVEL;
+const DICTIONARY_FILE_PATH = process.env.DICTIONARY_FILE_PATH ? process.env.DICTIONARY_FILE_PATH + "/MsgDictionary.json" : "/MsgDictionary.json";
 
 export const MESSAGE_LANGUAGE: string = process.env.MESSAGE_LANGUAGE ? process.env.MESSAGE_LANGUAGE : "english";
 export const ITALIAN_LANGUAGE = "italian";
@@ -17,7 +18,7 @@ interface Msg {
   French: string;
 }
 
-const filePath = './src/Common/MsgDictionary.json';
+const filePath = DICTIONARY_FILE_PATH;
 
 function loadJsonFile(filePath: string): Record<string, Msg> {
   try {
