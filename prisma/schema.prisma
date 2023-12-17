@@ -6,27 +6,291 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["Config"]
+  schemas  = ["Business", "Config", "Geography", "Market"]
+}
+
+model Category {
+  CategoryId Int       @id(map: "pk_category") @default(autoincrement())
+  Category   String    @unique @db.VarChar(1000)
+  ActiveFlg  Boolean   @default(false)
+  Product    Product[]
+
+  @@schema("Business")
+}
+
+model CategorySize {
+  CategorySizeId Int             @id(map: "pk_categorysize") @default(autoincrement())
+  CategorySize   String          @unique @db.VarChar(1000)
+  Dimensions     String?         @db.VarChar(1000)
+  FragileFlg     Boolean         @default(false)
+  BatteryFlg     Boolean         @default(false)
+  ActiveFlg      Boolean         @default(false)
+  DeliveryPrice  DeliveryPrice[]
+  ProductSize    ProductSize[]
+
+  @@schema("Business")
+}
+
+model Courier {
+  CourierId    Int            @id(map: "pk_courier") @default(autoincrement())
+  Courier      String         @unique @db.VarChar(1000)
+  ActiveFlg    Boolean        @default(false)
+  DeliveryType DeliveryType[]
+
+  @@schema("Business")
+}
+
+model DeliveryPrice {
+  DeliveryPriceId Int          @id(map: "pk_deliveryprice") @default(autoincrement())
+  DeliveryPrice   String       @unique @db.VarChar(1000)
+  Price           Decimal      @default(0) @db.Decimal(10, 2)
+  CurrencyId      Int          @default(0)
+  CategorySizeId  Int          @default(0)
+  DeliveryTypeId  Int          @default(0)
+  ActiveFlg       Boolean      @default(false)
+  CategorySize    CategorySize @relation(fields: [CategorySizeId], references: [CategorySizeId], onDelete: NoAction, onUpdate: NoAction, map: "deliveryprice_categorysizeid_categorysize_fk")
+  Currency        Currency     @relation(fields: [CurrencyId], references: [CurrencyId], onDelete: NoAction, onUpdate: NoAction, map: "deliveryprice_currencyid_currency_fk")
+  DeliveryType    DeliveryType @relation(fields: [DeliveryTypeId], references: [DeliveryTypeId], onDelete: NoAction, onUpdate: NoAction, map: "deliveryprice_deliverytypeid_deliverytype_fk")
+
+  @@schema("Business")
+}
+
+model DeliveryType {
+  DeliveryTypeId Int             @id(map: "pk_deliverytype") @default(autoincrement())
+  DeliveryType   String          @unique @db.VarChar(1000)
+  CourierId      Int             @default(0)
+  ActiveFlg      Boolean         @default(false)
+  DeliveryPrice  DeliveryPrice[]
+  Courier        Courier         @relation(fields: [CourierId], references: [CourierId], onDelete: NoAction, onUpdate: NoAction, map: "deliverytype_courierid_courier_fk")
+
+  @@schema("Business")
+}
+
+model File {
+  FileId                         BigInt    @id(map: "pk_file") @default(autoincrement())
+  FileName                       String    @db.VarChar(1000)
+  FileType                       String    @db.VarChar(100)
+  Content                        Bytes?
+  ActiveFlg                      Boolean   @default(false)
+  Product_Product_ImageIdToFile  Product[] @relation("Product_ImageIdToFile")
+  Product_Product_ManualIdToFile Product[] @relation("Product_ManualIdToFile")
+
+  @@schema("Business")
+}
+
+model Product {
+  ProductId                   BigInt   @id(map: "pk_product") @default(autoincrement())
+  ProductCode                 String   @unique(map: "product_uq1") @db.VarChar(100)
+  Product                     String   @unique(map: "product_uq2") @db.VarChar(1000)
+  Details                     String?  @db.VarChar(8000)
+  Price                       Decimal? @db.Decimal(10, 2)
+  Discount                    Decimal? @db.Decimal(10, 2)
+  CurrencyId                  Int      @default(0)
+  CategoryId                  Int      @default(0)
+  ImageId                     BigInt?
+  ManualId                    BigInt?
+  ActiveFlg                   Boolean  @default(false)
+  Category                    Category @relation(fields: [CategoryId], references: [CategoryId], onDelete: NoAction, onUpdate: NoAction, map: "product_categoryid_category_fk")
+  Currency                    Currency @relation(fields: [CurrencyId], references: [CurrencyId], onDelete: NoAction, onUpdate: NoAction, map: "product_currencyid_currency_fk")
+  File_Product_ImageIdToFile  File?    @relation("Product_ImageIdToFile", fields: [ImageId], references: [FileId], onDelete: NoAction, onUpdate: NoAction, map: "product_imageid_file_fk")
+  File_Product_ManualIdToFile File?    @relation("Product_ManualIdToFile", fields: [ManualId], references: [FileId], onDelete: NoAction, onUpdate: NoAction, map: "product_manualid_file_fk")
+
+  @@schema("Business")
+}
+
+model ProductSize {
+  ProductSizeId  BigInt       @id(map: "pk_productsize") @default(autoincrement())
+  ProductId      BigInt       @default(0)
+  ProductSize    String       @unique(map: "productsize_uq") @db.VarChar(1000)
+  Price          Decimal?     @db.Decimal(10, 2)
+  Discount       Decimal?     @db.Decimal(10, 2)
+  CurrencyId     Int          @default(0)
+  Length         Decimal?     @db.Decimal(10, 2)
+  Width          Decimal?     @db.Decimal(10, 2)
+  Depth          Decimal?     @db.Decimal(10, 2)
+  Weight         Decimal?     @db.Decimal(10, 2)
+  Volume         Decimal?     @db.Decimal(10, 2)
+  FragileFlg     Boolean      @default(false)
+  BatteryFlg     Boolean      @default(false)
+  CategorySizeId Int          @default(0)
+  ActiveFlg      Boolean      @default(false)
+  CategorySize   CategorySize @relation(fields: [CategorySizeId], references: [CategorySizeId], onDelete: NoAction, onUpdate: NoAction, map: "productsize_categorysizeid_categorysize_fk")
+  Currency       Currency     @relation(fields: [CurrencyId], references: [CurrencyId], onDelete: NoAction, onUpdate: NoAction, map: "productsize_currencyid_currency_fk")
+  Warehouse      Warehouse[]
+  Cart           Cart[]
+
+  @@schema("Business")
+}
+
+model Site {
+  SiteId    Int         @id(map: "pk_site") @default(autoincrement())
+  Site      String      @unique(map: "site_uq") @db.VarChar(1000)
+  CityId    Int         @default(0)
+  Lane      String      @db.VarChar(100)
+  Rack      String      @db.VarChar(100)
+  Drawer    String      @db.VarChar(100)
+  ActiveFlg Boolean     @default(false)
+  City      City        @relation(fields: [CityId], references: [CityId], onDelete: NoAction, onUpdate: NoAction, map: "site_cityid_city_fk")
+  Warehouse Warehouse[]
+
+  @@schema("Business")
+}
+
+model Warehouse {
+  WarehouseId   BigInt      @id(map: "pk_warehouse") @default(autoincrement())
+  ProductSizeId BigInt      @default(0)
+  SiteId        Int         @default(0)
+  Quantity      Int         @default(0)
+  ActiveFlg     Boolean     @default(false)
+  ProductSize   ProductSize @relation(fields: [ProductSizeId], references: [ProductSizeId], onDelete: NoAction, onUpdate: NoAction, map: "warehouse_productsizeid_productsize_fk")
+  Site          Site        @relation(fields: [SiteId], references: [SiteId], onDelete: NoAction, onUpdate: NoAction, map: "warehouse_siteid_site_fk")
+
+  @@unique([ProductSizeId, SiteId], map: "warehouse_uq")
+  @@schema("Business")
+}
+
+model Address {
+  AddressId     Int     @id(map: "pk_address") @default(autoincrement())
+  AddressTypeId Int     @default(0)
+  UserId        Int     @default(0)
+  Street        String  @db.VarChar(1000)
+  CityId        Int     @default(0)
+  CAP           String  @db.VarChar(100)
+  ActiveFlg     Boolean @default(false)
+  City          City    @relation(fields: [CityId], references: [CityId], onDelete: NoAction, onUpdate: NoAction, map: "address_cityid_city_fk")
+  User          User    @relation(fields: [UserId], references: [UserId], onDelete: NoAction, onUpdate: NoAction, map: "address_userid_user_fk")
+
+  @@unique([AddressTypeId, UserId], map: "address_uq")
+  @@schema("Config")
+}
+
+model AddressType {
+  AddressTypeId Int     @id(map: "pk_addresstype") @default(autoincrement())
+  AddressType   String  @unique(map: "addresstype_uq") @db.VarChar(1000)
+  ActiveFlg     Boolean @default(false)
+
+  @@schema("Config")
+}
+
+model Currency {
+  CurrencyId    Int             @id(map: "pk_currency") @default(autoincrement())
+  Currency      String          @unique @db.VarChar(1000)
+  CurrencyCode  String          @unique @db.VarChar(10)
+  ActiveFlg     Boolean         @default(false)
+  DeliveryPrice DeliveryPrice[]
+  Product       Product[]
+  ProductSize   ProductSize[]
+
+  @@schema("Config")
+}
+
+model Menu {
+  MenuId     Int          @id(map: "pk_menu") @default(autoincrement())
+  Menu       String       @unique @db.VarChar(1000)
+  ActiveFlg  Boolean      @default(false)
+  RoleToMenu RoleToMenu[]
+
+  @@schema("Config")
 }
 
 model Role {
-  RoleId    Int     @id(map: "pk_role") @default(autoincrement())
-  Role      String  @unique @db.VarChar(1000)
-  ActiveFlg Boolean @default(false)
-  User      User[]
+  RoleId     Int          @id(map: "pk_role") @default(autoincrement())
+  Role       String       @unique @db.VarChar(1000)
+  ActiveFlg  Boolean      @default(false)
+  RoleToMenu RoleToMenu[]
+  User       User[]
+
+  @@schema("Config")
+}
+
+model RoleToMenu {
+  RoleToMenuId Int     @id(map: "pk_roletomenu") @default(autoincrement())
+  RoleId       Int     @default(0)
+  MenuId       Int     @default(0)
+  ReadFlg      Boolean @default(false)
+  UpdateFlg    Boolean @default(false)
+  DeleteFlg    Boolean @default(false)
+  ActiveFlg    Boolean @default(false)
+  Menu         Menu    @relation(fields: [MenuId], references: [MenuId], onDelete: NoAction, onUpdate: NoAction, map: "roletomenu_menuid_menu_fk")
+  Role         Role    @relation(fields: [RoleId], references: [RoleId], onDelete: NoAction, onUpdate: NoAction, map: "roletomenu_roleid_role_fk")
 
   @@schema("Config")
 }
 
 model User {
-  UserId    Int     @id(map: "pk_user") @default(autoincrement())
-  Email     String  @unique(map: "user_uq") @db.VarChar(1000)
-  Surname   String? @db.VarChar(1000)
-  Name      String? @db.VarChar(1000)
-  Password  String? @db.VarChar(1000)
-  RoleId    Int     @default(0)
-  ActiveFlg Boolean @default(false)
-  Role      Role    @relation(fields: [RoleId], references: [RoleId], onDelete: NoAction, onUpdate: NoAction, map: "user_role_id_role_fk")
+  UserId    Int       @id(map: "pk_user") @default(autoincrement())
+  Email     String    @unique(map: "user_uq") @db.VarChar(1000)
+  Surname   String?   @db.VarChar(1000)
+  Name      String?   @db.VarChar(1000)
+  Password  String?   @db.VarChar(1000)
+  RoleId    Int       @default(0)
+  ActiveFlg Boolean   @default(false)
+  Address   Address[]
+  Role      Role      @relation(fields: [RoleId], references: [RoleId], onDelete: NoAction, onUpdate: NoAction, map: "user_role_id_role_fk")
+  Cart      Cart[]
+  Session   Session[]
 
   @@schema("Config")
+}
+
+model City {
+  CityId     Int       @id(map: "pk_city") @default(autoincrement())
+  City       String    @unique(map: "city_uq") @db.VarChar(1000)
+  ProvinceId Int       @default(0)
+  ActiveFlg  Boolean   @default(false)
+  Site       Site[]
+  Address    Address[]
+  Province   Province  @relation(fields: [ProvinceId], references: [ProvinceId], onDelete: NoAction, onUpdate: NoAction, map: "city_provinceid_province_fk")
+
+  @@schema("Geography")
+}
+
+model Nation {
+  NationId  Int        @id(map: "pk_nation") @default(autoincrement())
+  Nation    String     @unique @db.VarChar(1000)
+  ActiveFlg Boolean    @default(false)
+  Province  Province[]
+
+  @@schema("Geography")
+}
+
+model Province {
+  ProvinceId Int     @id(map: "pk_province") @default(autoincrement())
+  Province   String  @unique(map: "province_uq") @db.VarChar(1000)
+  NationId   Int     @default(0)
+  ActiveFlg  Boolean @default(false)
+  City       City[]
+  Nation     Nation  @relation(fields: [NationId], references: [NationId], onDelete: NoAction, onUpdate: NoAction, map: "province_nationid_nation_fk")
+
+  @@schema("Geography")
+}
+
+model Cart {
+  CartId        BigInt      @id(map: "pk_cart") @default(autoincrement())
+  UserId        Int         @default(0)
+  SessionId     BigInt      @default(0)
+  ProductSizeId BigInt      @default(0)
+  Quantity      Int         @default(0)
+  ActiveFlg     Boolean     @default(false)
+  ProductSize   ProductSize @relation(fields: [ProductSizeId], references: [ProductSizeId], onDelete: NoAction, onUpdate: NoAction, map: "cart_productsizeid_productsize_fk")
+  Session       Session     @relation(fields: [SessionId], references: [SessionId], onDelete: NoAction, onUpdate: NoAction, map: "cart_sessionid_session_fk")
+  User          User        @relation(fields: [UserId], references: [UserId], onDelete: NoAction, onUpdate: NoAction, map: "cart_userid_user_fk")
+
+  @@unique([CartId, UserId], map: "cart_uq")
+  @@schema("Market")
+}
+
+model Session {
+  SessionId        BigInt    @id(map: "pk_session") @default(autoincrement())
+  UserId           Int       @default(0)
+  StartDatetime    DateTime  @db.Timestamptz(6)
+  EndDatetime      DateTime? @db.Timestamptz(6)
+  Token            String    @db.VarChar(1000)
+  TokenEndDatetime DateTime  @db.Timestamptz(6)
+  ActiveFlg        Boolean   @default(false)
+  Cart             Cart[]
+  User             User      @relation(fields: [UserId], references: [UserId], onDelete: NoAction, onUpdate: NoAction, map: "session_userid_user_fk")
+
+  @@unique([SessionId, UserId], map: "session_uq")
+  @@schema("Market")
 }

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import winston from 'winston';
 import { Prisma } from "@prisma/client";
-import { number } from 'zod';
+import 'dotenv/config';
 const LOG_FILE_PATH = process.env.LOG_FILE_PATH;
 const LOG_LEVEL = process.env.LOG_LEVEL;
 const DICTIONARY_FILE_PATH = process.env.DICTIONARY_FILE_PATH ? process.env.DICTIONARY_FILE_PATH + "/MsgDictionary.json" : "/MsgDictionary.json";
@@ -17,8 +17,6 @@ interface Msg {
   Italian: string;
   French: string;
 }
-
-const filePath = DICTIONARY_FILE_PATH;
 
 function loadJsonFile(filePath: string): Record<string, Msg> {
   try {
@@ -66,7 +64,7 @@ function translateMsg(msg: Msg, language: string, params: any[]): string {
 }
 
 // load message dictionary from file:
-const jsonDictionaryRecords = loadJsonFile(filePath);
+const jsonDictionaryRecords = loadJsonFile(DICTIONARY_FILE_PATH);
 
 ////////////////////////////////////////////
 // exported objects

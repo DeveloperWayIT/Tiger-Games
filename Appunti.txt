@@ -35,7 +35,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["config"]
+  schemas  = ["Business","Config","Geography","Market"]
 }
 
 Per importare dal database gli schema:
@@ -51,5 +51,5 @@ npx ts-node index.ts
 -----------------------------------------------------
 
 yarn dev
-yarn update --> aggiorna yarn
+yarn upgrade --> aggiorna yarn
 yarn build  --> serve per debugger su VSC
