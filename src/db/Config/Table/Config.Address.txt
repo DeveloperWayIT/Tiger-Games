@@ -1,0 +1,16 @@
+CREATE TABLE "Config"."Address"
+(
+    "AddressId" serial NOT NULL,
+    "AddressTypeId" integer NOT NULL DEFAULT 0,
+    "UserId" integer NOT NULL DEFAULT 0,
+    "Street" varchar(1000) NOT NULL,
+    "CityId" integer NOT NULL DEFAULT 0,
+    "CAP" varchar(100) NOT NULL,
+    "ActiveFlg" boolean NOT NULL default false,
+    CONSTRAINT pk_Address PRIMARY KEY ("AddressId"),
+	CONSTRAINT Address_uq UNIQUE ("AddressTypeId","UserId"),
+	CONSTRAINT address_userid_user_fk FOREIGN KEY ("UserId") REFERENCES "Config"."User" ("UserId"),
+	CONSTRAINT address_cityid_city_fk FOREIGN KEY ("CityId") REFERENCES "Geography"."City" ("CityId")
+);
+
+

@@ -62,6 +62,7 @@ model DeliveryType {
   ActiveFlg      Boolean         @default(false)
   DeliveryPrice  DeliveryPrice[]
   Courier        Courier         @relation(fields: [CourierId], references: [CourierId], onDelete: NoAction, onUpdate: NoAction, map: "deliverytype_courierid_courier_fk")
+  PurchaseOrder  PurchaseOrder[]
 
   @@schema("Business")
 }
@@ -99,25 +100,27 @@ model Product {
 }
 
 model ProductSize {
-  ProductSizeId  BigInt       @id(map: "pk_productsize") @default(autoincrement())
-  ProductId      BigInt       @default(0)
-  ProductSize    String       @unique(map: "productsize_uq") @db.VarChar(1000)
-  Price          Decimal?     @db.Decimal(10, 2)
-  Discount       Decimal?     @db.Decimal(10, 2)
-  CurrencyId     Int          @default(0)
-  Length         Decimal?     @db.Decimal(10, 2)
-  Width          Decimal?     @db.Decimal(10, 2)
-  Depth          Decimal?     @db.Decimal(10, 2)
-  Weight         Decimal?     @db.Decimal(10, 2)
-  Volume         Decimal?     @db.Decimal(10, 2)
-  FragileFlg     Boolean      @default(false)
-  BatteryFlg     Boolean      @default(false)
-  CategorySizeId Int          @default(0)
-  ActiveFlg      Boolean      @default(false)
-  CategorySize   CategorySize @relation(fields: [CategorySizeId], references: [CategorySizeId], onDelete: NoAction, onUpdate: NoAction, map: "productsize_categorysizeid_categorysize_fk")
-  Currency       Currency     @relation(fields: [CurrencyId], references: [CurrencyId], onDelete: NoAction, onUpdate: NoAction, map: "productsize_currencyid_currency_fk")
-  Warehouse      Warehouse[]
-  Cart           Cart[]
+  ProductSizeId         BigInt                  @id(map: "pk_productsize") @default(autoincrement())
+  ProductId             BigInt                  @default(0)
+  ProductSize           String                  @unique(map: "productsize_uq") @db.VarChar(1000)
+  Price                 Decimal?                @db.Decimal(10, 2)
+  Discount              Decimal?                @db.Decimal(10, 2)
+  CurrencyId            Int                     @default(0)
+  Length                Decimal?                @db.Decimal(10, 2)
+  Width                 Decimal?                @db.Decimal(10, 2)
+  Depth                 Decimal?                @db.Decimal(10, 2)
+  Weight                Decimal?                @db.Decimal(10, 2)
+  Volume                Decimal?                @db.Decimal(10, 2)
+  FragileFlg            Boolean                 @default(false)
+  BatteryFlg            Boolean                 @default(false)
+  CategorySizeId        Int                     @default(0)
+  ActiveFlg             Boolean                 @default(false)
+  CategorySize          CategorySize            @relation(fields: [CategorySizeId], references: [CategorySizeId], onDelete: NoAction, onUpdate: NoAction, map: "productsize_categorysizeid_categorysize_fk")
+  Currency              Currency                @relation(fields: [CurrencyId], references: [CurrencyId], onDelete: NoAction, onUpdate: NoAction, map: "productsize_currencyid_currency_fk")
+  Warehouse             Warehouse[]
+  Cart                  Cart[]
+  PurchaseOrderItem     PurchaseOrderItem[]
+  WishlistToProductSize WishlistToProductSize[]
 
   @@schema("Business")
 }
@@ -218,17 +221,19 @@ model RoleToMenu {
 }
 
 model User {
-  UserId    Int       @id(map: "pk_user") @default(autoincrement())
-  Email     String    @unique(map: "user_uq") @db.VarChar(1000)
-  Surname   String?   @db.VarChar(1000)
-  Name      String?   @db.VarChar(1000)
-  Password  String?   @db.VarChar(1000)
-  RoleId    Int       @default(0)
-  ActiveFlg Boolean   @default(false)
-  Address   Address[]
-  Role      Role      @relation(fields: [RoleId], references: [RoleId], onDelete: NoAction, onUpdate: NoAction, map: "user_role_id_role_fk")
-  Cart      Cart[]
-  Session   Session[]
+  UserId        Int             @id(map: "pk_user") @default(autoincrement())
+  Email         String          @unique(map: "user_uq") @db.VarChar(1000)
+  Surname       String?         @db.VarChar(1000)
+  Name          String?         @db.VarChar(1000)
+  Password      String?         @db.VarChar(1000)
+  RoleId        Int             @default(0)
+  ActiveFlg     Boolean         @default(false)
+  Address       Address[]
+  Role          Role            @relation(fields: [RoleId], references: [RoleId], onDelete: NoAction, onUpdate: NoAction, map: "user_role_id_role_fk")
+  Cart          Cart[]
+  PurchaseOrder PurchaseOrder[]
+  Session       Session[]
+  Wishlist      Wishlist[]
 
   @@schema("Config")
 }
@@ -292,5 +297,70 @@ model Session {
   User             User      @relation(fields: [UserId], references: [UserId], onDelete: NoAction, onUpdate: NoAction, map: "session_userid_user_fk")
 
   @@unique([SessionId, UserId], map: "session_uq")
+  @@schema("Market")
+}
+
+model PurchaseOrder {
+  PurchaseOrderId       BigInt              @id(map: "pk_purchaseorder") @default(autoincrement())
+  UserId                Int                 @default(0)
+  PurchaseOrderDatetime DateTime            @db.Timestamptz(6)
+  TotalPrice            Decimal             @default(0) @db.Decimal(10, 2)
+  TotalDiscount         Decimal             @default(0) @db.Decimal(10, 2)
+  DeliveryPrice         Decimal             @default(0) @db.Decimal(10, 2)
+  Total                 Decimal             @default(0) @db.Decimal(10, 2)
+  DeliveryTypeId        Int                 @default(0)
+  PurchaseOrderStatusId Int
+  ActiveFlg             Boolean             @default(false)
+  DeliveryType          DeliveryType        @relation(fields: [DeliveryTypeId], references: [DeliveryTypeId], onDelete: NoAction, onUpdate: NoAction, map: "purchaseorder_deliverytypeid_deliverytype_fk")
+  PurchaseOrderStatus   PurchaseOrderStatus @relation(fields: [PurchaseOrderStatusId], references: [PurchaseOrderStatusId], onDelete: NoAction, onUpdate: NoAction, map: "purchaseorder_purchaseorderstatusid_purchaseorderstatus_fk")
+  User                  User                @relation(fields: [UserId], references: [UserId], onDelete: NoAction, onUpdate: NoAction, map: "purchaseorder_userid_user_fk")
+  PurchaseOrderItem     PurchaseOrderItem[]
+
+  @@schema("Market")
+}
+
+model PurchaseOrderItem {
+  PurchaseOrderItemId BigInt        @id(map: "pk_purchaseorderitem") @default(autoincrement())
+  PurchaseOrderId     BigInt
+  ProductSizeId       BigInt
+  Quantity            Int           @default(0)
+  ProductPrice        Decimal       @default(0) @db.Decimal(10, 2)
+  Discount            Decimal       @default(0) @db.Decimal(10, 2)
+  ItemPrice           Decimal       @default(0) @db.Decimal(10, 2)
+  ActiveFlg           Boolean       @default(false)
+  ProductSize         ProductSize   @relation(fields: [ProductSizeId], references: [ProductSizeId], onDelete: NoAction, onUpdate: NoAction, map: "purchaseorderitem_productsizeid_productsize_fk")
+  PurchaseOrder       PurchaseOrder @relation(fields: [PurchaseOrderId], references: [PurchaseOrderId], onDelete: NoAction, onUpdate: NoAction, map: "purchaseorderitem_purchaseorderid_purchaseorder_fk")
+
+  @@schema("Market")
+}
+
+model PurchaseOrderStatus {
+  PurchaseOrderStatusId Int             @id(map: "pk_purchaseorderstatus")
+  PurchaseOrderStatus   String          @unique(map: "purchaseorderstatus_uq") @db.VarChar(1000)
+  ActiveFlg             Boolean         @default(false)
+  PurchaseOrder         PurchaseOrder[]
+
+  @@schema("Market")
+}
+
+model Wishlist {
+  WishlistId            BigInt                  @id(map: "pk_wishlist") @default(autoincrement())
+  Wishlist              String                  @unique(map: "wishlist_uq") @db.VarChar(1000)
+  UserId                Int                     @default(0)
+  ActiveFlg             Boolean                 @default(false)
+  User                  User                    @relation(fields: [UserId], references: [UserId], onDelete: NoAction, onUpdate: NoAction, map: "wishlist_userid_user_fk")
+  WishlistToProductSize WishlistToProductSize[]
+
+  @@schema("Market")
+}
+
+model WishlistToProductSize {
+  WishlistToProductSizeId BigInt      @id(map: "pk_wishlisttoproductsize") @default(autoincrement())
+  WishlistId              BigInt      @default(0)
+  ProductSizeId           BigInt      @default(0)
+  ActiveFlg               Boolean     @default(false)
+  ProductSize             ProductSize @relation(fields: [ProductSizeId], references: [ProductSizeId], onDelete: NoAction, onUpdate: NoAction, map: "wishlisttoproductsize_productsizeid_productsize_fk")
+  Wishlist                Wishlist    @relation(fields: [WishlistId], references: [WishlistId], onDelete: NoAction, onUpdate: NoAction, map: "wishlisttoproductsize_wishlistid_wishlist_fk")
+
   @@schema("Market")
 }
