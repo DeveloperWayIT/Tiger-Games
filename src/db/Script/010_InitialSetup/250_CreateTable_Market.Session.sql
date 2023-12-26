@@ -15,3 +15,6 @@ CREATE TABLE "Market"."Session"
 );
 
 
+INSERT INTO "Market"."Session"
+("SessionId", "UserId", "StartDatetime", "EndDatetime", "Token", "TokenEndDatetime", "ActiveFlg")
+VALUES(nextval('"Market"."Session_SessionId_seq"'::regclass), 1, '2023-12-26 00:00:00+00', null, 'fdsakljfdsfdafdjkldsfdsfd', '2999-12-31 00:00:00+00', false);

@@ -130,3 +130,17 @@ export function decodePrismaError(error: any, specificMsgCode: string, params: a
   
   return msgspecTranslated + ", " + message;
 }
+
+export function jsonparse(obj: any) { 
+  const resultForJson = JSON.parse(JSON.stringify(obj, (key, value) => {
+    if (typeof value === 'bigint') {
+      return value.toString();
+    } 
+    if (key === "Content") {
+      return Buffer.from(value).toString('base64');
+    }
+    return value;
+  }));
+
+  return resultForJson;
+}

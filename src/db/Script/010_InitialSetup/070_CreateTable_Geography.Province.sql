@@ -12,4 +12,6 @@ CREATE TABLE "Geography"."Province"
 );
 
 
-
+INSERT INTO "Geography"."Province"
+("ProvinceId", "Province", "NationId", "ActiveFlg")
+VALUES(nextval('"Geography"."Province_ProvinceId_seq"'::regclass), 'Genova', 1, true);

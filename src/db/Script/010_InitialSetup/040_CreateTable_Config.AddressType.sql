@@ -9,4 +9,5 @@ CREATE TABLE "Config"."AddressType"
 	CONSTRAINT AddressType_uq UNIQUE ("AddressType")
 );
 
-
+insert into "Config"."AddressType"("AddressTypeId", "AddressType", "ActiveFlg")
+                           values (0,'Unkwnown',true);

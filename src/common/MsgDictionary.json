@@ -53,8 +53,8 @@
     },
     {
         "MsgCode": "P2003",
-        "English": "because it is still used by other records. First manage them",
-        "Italian": "perché è usato da altri elementi, che bisogna gestire prima",
+        "English": "because it is still referred by other records. First manage them",
+        "Italian": "perché riferisce altri elementi, che bisogna gestire prima",
         "French": "porqui il est utilizé par autres elements qui sont tous à gestir en avant"
     },
     {
