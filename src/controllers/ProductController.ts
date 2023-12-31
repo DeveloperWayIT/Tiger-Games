@@ -38,6 +38,14 @@ export class ProductController {
     try {
       const ProductId = BigInt(req.params.id);
       const Product = await prisma.product.findUnique({
+        include: {
+          Currency: {
+            select: {
+              Currency: true,
+              CurrencyCode: true,
+            },
+          },
+        },
         where: {
           ProductId: ProductId,
         },
@@ -59,6 +67,14 @@ export class ProductController {
 
       fillParametersData(req.body, queryConditions);
       const Products = await prisma.product.findMany({
+        include: {
+          Currency: {
+            select: {
+              Currency: true,
+              CurrencyCode: true,
+            },
+          },
+        },
         where: queryConditions,
       });
 

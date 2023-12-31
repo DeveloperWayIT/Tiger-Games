@@ -7,7 +7,6 @@ CREATE TABLE "Business"."ProductSize"
     "ProductSize" varchar(1000) NOT NULL,
 	"Price" numeric(10,2) NULL,
 	"Discount" numeric(10,2) NULL,
-    "CurrencyId" integer NOT NULL DEFAULT 0,
     "Length" numeric(10,2) NULL,
 	"Width" numeric(10,2) NULL,
 	"Depth" numeric(10,2) NULL,
@@ -19,7 +18,7 @@ CREATE TABLE "Business"."ProductSize"
     "ActiveFlg" boolean NOT NULL default false,
     CONSTRAINT pk_ProductSize PRIMARY KEY ("ProductSizeId"),
 	CONSTRAINT ProductSize_uq UNIQUE ("ProductSize"),
-	CONSTRAINT ProductSize_CurrencyId_Currency_fk FOREIGN KEY ("CurrencyId") REFERENCES "Config"."Currency" ("CurrencyId"),
+	CONSTRAINT ProductSize_ProductId_Product_fk FOREIGN KEY ("ProductId") REFERENCES "Business"."Product" ("ProductId"),
 	CONSTRAINT ProductSize_CategorySizeId_CategorySize_fk FOREIGN KEY ("CategorySizeId") REFERENCES "Business"."CategorySize" ("CategorySizeId")
 );
 

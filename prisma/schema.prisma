@@ -80,21 +80,22 @@ model File {
 }
 
 model Product {
-  ProductId                   BigInt   @id(map: "pk_product") @default(autoincrement())
-  ProductCode                 String   @unique(map: "product_uq1") @db.VarChar(100)
-  Product                     String   @unique(map: "product_uq2") @db.VarChar(1000)
-  Details                     String?  @db.VarChar(8000)
-  Price                       Decimal? @db.Decimal(10, 2)
-  Discount                    Decimal? @db.Decimal(10, 2)
-  CurrencyId                  Int      @default(0)
-  CategoryId                  Int      @default(0)
+  ProductId                   BigInt        @id(map: "pk_product") @default(autoincrement())
+  ProductCode                 String        @unique(map: "product_uq1") @db.VarChar(100)
+  Product                     String        @unique(map: "product_uq2") @db.VarChar(1000)
+  Details                     String?       @db.VarChar(8000)
+  Price                       Decimal?      @db.Decimal(10, 2)
+  Discount                    Decimal?      @db.Decimal(10, 2)
+  CurrencyId                  Int           @default(0)
+  CategoryId                  Int           @default(0)
   ImageId                     BigInt?
   ManualId                    BigInt?
-  ActiveFlg                   Boolean  @default(false)
-  Category                    Category @relation(fields: [CategoryId], references: [CategoryId], onDelete: NoAction, onUpdate: NoAction, map: "product_categoryid_category_fk")
-  Currency                    Currency @relation(fields: [CurrencyId], references: [CurrencyId], onDelete: NoAction, onUpdate: NoAction, map: "product_currencyid_currency_fk")
-  File_Product_ImageIdToFile  File?    @relation("Product_ImageIdToFile", fields: [ImageId], references: [FileId], onDelete: NoAction, onUpdate: NoAction, map: "product_imageid_file_fk")
-  File_Product_ManualIdToFile File?    @relation("Product_ManualIdToFile", fields: [ManualId], references: [FileId], onDelete: NoAction, onUpdate: NoAction, map: "product_manualid_file_fk")
+  ActiveFlg                   Boolean       @default(false)
+  Category                    Category      @relation(fields: [CategoryId], references: [CategoryId], onDelete: NoAction, onUpdate: NoAction, map: "product_categoryid_category_fk")
+  Currency                    Currency      @relation(fields: [CurrencyId], references: [CurrencyId], onDelete: NoAction, onUpdate: NoAction, map: "product_currencyid_currency_fk")
+  File_Product_ImageIdToFile  File?         @relation("Product_ImageIdToFile", fields: [ImageId], references: [FileId], onDelete: NoAction, onUpdate: NoAction, map: "product_imageid_file_fk")
+  File_Product_ManualIdToFile File?         @relation("Product_ManualIdToFile", fields: [ManualId], references: [FileId], onDelete: NoAction, onUpdate: NoAction, map: "product_manualid_file_fk")
+  ProductSize                 ProductSize[]
 
   @@schema("Business")
 }
@@ -105,7 +106,6 @@ model ProductSize {
   ProductSize           String                  @unique(map: "productsize_uq") @db.VarChar(1000)
   Price                 Decimal?                @db.Decimal(10, 2)
   Discount              Decimal?                @db.Decimal(10, 2)
-  CurrencyId            Int                     @default(0)
   Length                Decimal?                @db.Decimal(10, 2)
   Width                 Decimal?                @db.Decimal(10, 2)
   Depth                 Decimal?                @db.Decimal(10, 2)
@@ -116,7 +116,7 @@ model ProductSize {
   CategorySizeId        Int                     @default(0)
   ActiveFlg             Boolean                 @default(false)
   CategorySize          CategorySize            @relation(fields: [CategorySizeId], references: [CategorySizeId], onDelete: NoAction, onUpdate: NoAction, map: "productsize_categorysizeid_categorysize_fk")
-  Currency              Currency                @relation(fields: [CurrencyId], references: [CurrencyId], onDelete: NoAction, onUpdate: NoAction, map: "productsize_currencyid_currency_fk")
+  Product               Product                 @relation(fields: [ProductId], references: [ProductId], onDelete: NoAction, onUpdate: NoAction, map: "productsize_productid_product_fk")
   Warehouse             Warehouse[]
   Cart                  Cart[]
   PurchaseOrderItem     PurchaseOrderItem[]
@@ -182,7 +182,6 @@ model Currency {
   ActiveFlg     Boolean         @default(false)
   DeliveryPrice DeliveryPrice[]
   Product       Product[]
-  ProductSize   ProductSize[]
 
   @@schema("Config")
 }
@@ -230,7 +229,6 @@ model User {
   ActiveFlg     Boolean         @default(false)
   Address       Address[]
   Role          Role            @relation(fields: [RoleId], references: [RoleId], onDelete: NoAction, onUpdate: NoAction, map: "user_role_id_role_fk")
-  Cart          Cart[]
   PurchaseOrder PurchaseOrder[]
   Session       Session[]
   Wishlist      Wishlist[]
@@ -272,16 +270,13 @@ model Province {
 
 model Cart {
   CartId        BigInt      @id(map: "pk_cart") @default(autoincrement())
-  UserId        Int         @default(0)
   SessionId     BigInt      @default(0)
   ProductSizeId BigInt      @default(0)
   Quantity      Int         @default(0)
   ActiveFlg     Boolean     @default(false)
   ProductSize   ProductSize @relation(fields: [ProductSizeId], references: [ProductSizeId], onDelete: NoAction, onUpdate: NoAction, map: "cart_productsizeid_productsize_fk")
   Session       Session     @relation(fields: [SessionId], references: [SessionId], onDelete: NoAction, onUpdate: NoAction, map: "cart_sessionid_session_fk")
-  User          User        @relation(fields: [UserId], references: [UserId], onDelete: NoAction, onUpdate: NoAction, map: "cart_userid_user_fk")
 
-  @@unique([CartId, UserId], map: "cart_uq")
   @@schema("Market")
 }
 
