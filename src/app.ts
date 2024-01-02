@@ -8,6 +8,7 @@ import { fileRoutes } from './routes/FileRoutes';
 import { productRoutes } from './routes/ProductRoutes';
 import { productSizeRoutes } from './routes/ProductSizeRoutes';
 import { cartRoutes } from './routes/CartRoutes';
+import { sessionRoutes } from './routes/SessionRoutes';
 
 const app = express();
 const port = process.env.PORT || 1337;
@@ -23,6 +24,7 @@ app.use('/api', fileRoutes);
 app.use('/api', productRoutes);
 app.use('/api', productSizeRoutes);
 app.use('/api', cartRoutes);
+app.use('/api', sessionRoutes);
 
 // Chiudi la connection pool e Prisma quando l'applicazione termina
 process.on('SIGINT', async () => {

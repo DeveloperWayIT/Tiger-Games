@@ -29,7 +29,7 @@ export class CartController {
 
   static async getCartById(req: Request, res: Response) {
     try {
-      const CartId = parseInt(req.params.id);
+      const CartId = BigInt(req.params.id);
       const Cart = await prisma.cart.findUnique({
         where: {
           CartId: CartId,
