@@ -1,0 +1,7 @@
+CREATE TABLE "Config"."Role"
+(
+    "RoleId" serial NOT NULL,
+    "Role" CHARACTER VARYING (1000) NOT NULL UNIQUE,	
+    "ActiveFlg" boolean NOT NULL default false,
+    CONSTRAINT pk_role PRIMARY KEY ("RoleId")
+);

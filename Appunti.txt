@@ -1,6 +1,30 @@
+GET:
+http://localhost:4000/api/Role/all
+http://localhost:4000/api/Role/1  (by id)
+
+
+POST:
+http://localhost:4000/api/Role/query  { "role": "Provider" , ... }
+
+http://localhost:4000/api/Role/create { "role": "Provider" , ... }
+
+http://localhost:4000/api/Role/update 
+{ 
+  "conditions" : {
+    "role_id": 0
+  },
+  "updateData": {
+    "active_flg": false
+  }
+}
+
+http://localhost:4000/api/Role/delete { "role": "Provider" , ... }
+
+------------------------------------------------------------------------------
+
 Per installare yarn:
 npm install -g yarn
-
+-----------------------------------------------------
 
 Per multischema, modificare schema.prisma così:
 generator client {
@@ -11,25 +35,21 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["config"]
+  schemas  = ["Business","Config","Geography","Market"]
 }
 
 Per importare dal database gli schema:
-npx prisma db pull
-
+1) npx prisma db pull
+2) npx prisma generate
+Se non già fatto, prima del punto 2) eseguire:
 yarn add @prisma/client
 
-npx prisma generate
+
 
 npx ts-node index.ts
 
+-----------------------------------------------------
 
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: 'file:./dev_qa.db',
-    },
-  },
-})
+yarn dev
+yarn upgrade --> aggiorna yarn
+yarn build  --> serve per debugger su VSC

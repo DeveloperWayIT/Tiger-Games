@@ -1,0 +1,129 @@
+import { Request, Response } from "express";
+import { prisma } from "../utils/prisma";
+import { ITALIAN_LANGUAGE, MESSAGE_LANGUAGE, fillParametersData, decodePrismaError, logger } from "../common/Common";
+import { parseBooleanDef } from "zod-to-json-schema";
+import { boolean } from "zod";
+import { Prisma } from "@prisma/client";
+
+interface {{EntityName}}CreateInput {
+  // All properties of the model:
+  {{EntityName}}Id?: number;
+  {{EntityName}}: string;
+  ActiveFlg: boolean;
+}
+
+let specificMsg: string;
+
+export class {{EntityName}}Controller {
+
+  static async getAll{{EntityName}}s(req: Request, res: Response) {
+    try {
+      const {{EntityName}}s = await prisma.{{PrismaMapName}}.findMany();
+      res.json({{EntityName}}s);
+    } catch (error) {
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0001", ["{{EntityName}}"]) });
+    }
+  }
+
+  static async get{{EntityName}}ById(req: Request, res: Response) {
+    try {
+      const {{EntityName}}Id = parseInt(req.params.id);
+      const {{EntityName}} = await prisma.{{PrismaMapName}}.findUnique({
+        where: {
+          {{EntityName}}Id: {{EntityName}}Id,
+        },
+      });
+      res.json({{EntityName}});
+    } catch (error) {
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0002", ["{{EntityName}}"]) });
+    }
+  }
+
+  /**
+   * 
+   * @param req.body {"{{EntityName}}": "Client"}
+   * @param res 
+   */
+  static async get{{EntityName}}ByFilter(req: Request, res: Response) {
+    try {
+      const queryConditions: Record<string, any> = {};
+
+      fillParametersData(req.body, queryConditions);
+      const {{EntityName}}s = await prisma.{{PrismaMapName}}.findMany({
+        where: queryConditions,
+      });
+
+      res.json({{EntityName}}s);
+    } catch (error) {
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0003", ["{{EntityName}}"]) });
+    }
+  }
+
+  /**
+   * 
+   * @param req.body { { "{{EntityName}}": "Provider", "ActiveFlg": true }, <other fields...> }
+   * @param res 
+   */
+  static async create{{EntityName}}(req: Request, res: Response) {
+    const data: {{EntityName}}CreateInput = { {{EntityName}}: "", ActiveFlg: false };
+    try {
+      fillParametersData(req.body, data);
+
+      const result = await prisma.{{PrismaMapName}}.create({
+        data: data,
+      });
+
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0004", ["{{EntityName}}", data.{{EntityName}}]) });
+    }
+  }
+
+  /**
+   * 
+   * @param req.body { "{{EntityName}}Id": 3, <other conditions...> }
+   * @param res 
+   */
+  static async delete{{EntityName}}(req: Request, res: Response) {
+    try {
+      const data: Record<string, any> = {};
+
+      fillParametersData(req.body, data);
+      const result = await prisma.{{PrismaMapName}}.deleteMany({
+        where: data,
+      });
+
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0005", ["{{EntityName}}"]) });
+    }
+  }
+
+  /**
+   * 
+   * @param req.body 
+   * { 
+        "conditions" : {
+          "{{EntityName}}Id": 5
+        },
+        "updateData": {
+          "ActiveFlg": false
+        }
+      }
+   * @param res { "count": 1 }
+   */
+  static async update{{EntityName}}(req: Request, res: Response) {
+    try {
+      const { conditions, updateData } = req.body;
+
+      const result = await prisma.{{PrismaMapName}}.updateMany({
+        where: conditions,
+        data: updateData,
+      });
+
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: decodePrismaError(error, "SPEC0006", ["{{EntityName}}"]) });
+    }
+  }
+}

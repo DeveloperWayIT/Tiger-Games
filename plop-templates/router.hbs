@@ -1,0 +1,14 @@
+import { Router } from "express";
+import { {{EntityName}}Controller } from "../controllers/{{EntityName}}Controller";
+
+const {{PrismaMapName}}Routes = Router();
+
+{{PrismaMapName}}Routes.get("/{{EntityName}}/all", {{EntityName}}Controller.getAll{{EntityName}}s);
+{{PrismaMapName}}Routes.get("/{{EntityName}}/:id", {{EntityName}}Controller.get{{EntityName}}ById);
+
+{{PrismaMapName}}Routes.post("/{{EntityName}}/query", {{EntityName}}Controller.get{{EntityName}}ByFilter);
+{{PrismaMapName}}Routes.post("/{{EntityName}}/create", {{EntityName}}Controller.create{{EntityName}});
+{{PrismaMapName}}Routes.post("/{{EntityName}}/update", {{EntityName}}Controller.update{{EntityName}});
+{{PrismaMapName}}Routes.post("/{{EntityName}}/delete", {{EntityName}}Controller.delete{{EntityName}});
+
+export { {{PrismaMapName}}Routes };

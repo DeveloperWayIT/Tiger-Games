@@ -3,6 +3,12 @@ import { prisma } from './utils/prisma';
 import path from 'path';
 import { roleRoutes } from './routes/RoleRoutes';
 import { userRoutes } from './routes/UserRoutes';
+import { addressRoutes } from './routes/AddressRoutes';
+import { fileRoutes } from './routes/FileRoutes';
+import { productRoutes } from './routes/ProductRoutes';
+import { productSizeRoutes } from './routes/ProductSizeRoutes';
+import { cartRoutes } from './routes/CartRoutes';
+import { sessionRoutes } from './routes/SessionRoutes';
 
 const app = express();
 
@@ -16,30 +22,12 @@ app.use(express.json());
 // Aggiunge le route specifiche
 app.use('/api', roleRoutes);
 app.use('/api', userRoutes);
-
-/*
-app.get('/roles', async (req, res) => {
-  try {
-    // Utilizza Prisma per ottenere tutti gli utenti dalla tabella "User"
-    const roles = await prisma.role.findMany();
-    res.json(roles);
-  } catch (error) {
-    console.error('Error retrieving users:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-app.get('/users', async (req, res) => {
-  try {
-    // Utilizza Prisma per ottenere tutti gli utenti dalla tabella "User"
-    const users = await prisma.user.findMany();
-    res.json(users);
-  } catch (error) {
-    console.error('Error retrieving users:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-*/
+app.use('/api', addressRoutes);
+app.use('/api', fileRoutes);
+app.use('/api', productRoutes);
+app.use('/api', productSizeRoutes);
+app.use('/api', cartRoutes);
+app.use('/api', sessionRoutes);
 
 // Chiudi la connection pool e Prisma quando l'applicazione termina
 process.on('SIGINT', async () => {
