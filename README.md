@@ -93,4 +93,4 @@ Thanks goes to these wonderful people
 ## License
 
 This project is licensed under the ISC License - see the [LICENSE.md](https://github.com/stemmlerjs/ddd-forum/blob/master/LICENCE.md) file for details
->>>>>>> b5d7d98 (chore(gg-24): change readme file and add .env template)
+
