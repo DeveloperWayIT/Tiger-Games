@@ -1,6 +1,6 @@
-<<<<<<< HEAD
+
 # Tiger Games
-=======
+
 <p align="center">
  <img src="./client/src/assets/tiger-games-logo.png"/>
 </p>
