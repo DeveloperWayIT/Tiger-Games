@@ -44,12 +44,6 @@ yarn && cd client && yarn
 
 ### Built with
 
-#### Backend
-
-- [Prisma](https://www.prisma.io/) - Next-generation Node.js and TypeScript ORM
-- [Express.js](https://expressjs.com/) - Lightweight webserver
-- [PostgreSQL](https://www.postgresql.org/) - The World's Most Advanced Open Source Relational Database
-
 #### Frontend
 
 - [React.js](https://reactjs.org/)
@@ -57,11 +51,18 @@ yarn && cd client && yarn
 - [Styled-components](https://styled-components.com/)
 
 <!-- ## Project visualization -->
-
 <!-- Here's a large-scale visualization of the repo. As I put more time into the front-end, it may change a little bit. -->
+#### Backend
 
-<!-- TODO: aggiungere diagramma -->
-<!-- ![Visualization of this repo](./diagram.svg) -->
+- [Prisma](https://www.prisma.io/) - Next-generation Node.js and TypeScript ORM
+- [Express.js](https://expressjs.com/) - Lightweight webserver
+- [PostgreSQL](https://www.postgresql.org/) - The World's Most Advanced Open Source Relational Database
+
+#### Data Model
+- Designed to be adaptable and scalable to any e-commerce website
+<p align="center">
+ <img src="./client/src/assets/ERDiagram.png"/>
+</p>
 
 ## Contributing
 
