@@ -1,11 +1,25 @@
-import { useState } from 'react';
+import { useCallback } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
+import { useAppSelector, useAppDispatch } from './store/hooks';
+import { decrement, increment } from './store/counter';
+import { selectCounterState } from './store/counter/selectors';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const { value } = useAppSelector(selectCounterState);
+  const dispatch = useAppDispatch();
 
+  const handleCounterIncrement = useCallback(
+    () => dispatch(increment()),
+    [dispatch]
+  );
+
+  const handleCounterDecrement = useCallback(
+    () => dispatch(decrement()),
+    [dispatch]
+  );
+  // const [count, setCount] = useState(0);
   return (
     <>
       <div>
@@ -17,10 +31,18 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount(count => count + 1)}>
-          count is {count}
-        </button>
+      <div style={{ textAlign: 'center' }} className="card">
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+          }}
+        >
+          <button onClick={handleCounterIncrement}> + </button>
+          <div>count is {value}</div>
+          <button onClick={handleCounterDecrement}> - </button>
+        </div>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
